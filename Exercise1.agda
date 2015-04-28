@@ -15,7 +15,7 @@ data 𝟙 : Set where
   it : 𝟙
 
 -- Type \b1 to obtain the Unicode 𝟙 glyph.
---
+-- 𝟙
 -- Canonical elements are the values of a given type (i.e. they cannot β-reduce any further).
 -- Note that `(λ x → x) it' and `it' both inhabit type `𝟙' but `it' is canonical whereas
 -- `(λ x → x) it' is not as we can still β-reduce further.
@@ -46,7 +46,7 @@ data 𝟙 : Set where
 data 𝟘 : Set where
 
 -- Type \b0 to obtain the Unicode 𝟘 glyph.
---
+-- 𝟘
 -- Note how this really is the 𝟘 (empty, void) type due to Agda being especially
 -- picky about termination of functions.  Haskell and OCaml have no equivalent
 -- to this type, despite claiming that they do.  In particular, the Haskell
@@ -70,7 +70,7 @@ ex-falso : (A : Set) → 𝟘 → A
 ex-falso A ()
 
 -- Type \r to obtain the rightarrow → Unicode glyph.
---
+-- →
 -- What does ex-falso say?  Informally, it says if we can ever conjure up an
 -- element of type 𝟘 then we can deduce anything (i.e. we can conclude A, for
 -- any A).
@@ -140,7 +140,7 @@ id₀ : 𝟘 → 𝟘
 id₀ x = x
 
 -- Type \_0 to obtain the underscore ₀ Unicode glyph.
---
+-- ₀
 -- Note how, despite 𝟘 having no elements, we can still write the identity
 -- function at type 𝟘.  The function doesn't inspect its argument, it just
 -- passes it straight through, as an output---we never have to rely on there
@@ -154,7 +154,7 @@ idₐ : (A : Set) → A → A
 idₐ A x = x
 
 -- Type \_a to obtain the underscore ₐ Unicode glyph.
---
+-- ₐ
 -- The (A : Set) → … portion of the type above should be read as `for any small type
 -- A, …'.  In fact, the function arrow → is a special case of the generalised
 -- function space constructor, and we could have written idₐ instead in the
@@ -164,14 +164,14 @@ idₐ′ : (A : Set)(y : A) → A
 idₐ′ A x = x
 
 -- Type \' to obtain the dash ′ Unicode glyph.
---
+-- ′  
 -- Which in turn could have been written:
 
 idₐ″ : (A : Set)(_ : A) → A
 idₐ″ A x = x
 
 -- Type \'2 to obtain the double-dash ″ Unicode glyph.
---
+-- ″ 
 -- As `y' is not used in the remainder of the type so it can be replaced with the wildcard.
 
 -- We can of course define new ways of combining existing types to form new ones.
@@ -181,7 +181,7 @@ data _×_ (A B : Set) : Set where
   _,_ : A → B → A × B
 
 -- Type \x to obtain the × Unicode glyph.
---
+-- ×
 -- Note the use of mixfix syntax above: _×_ indicates that × should be written infix
 -- between two types, where _ can be thought of as a `hole' in an identifier.
 -- Similarly in the constructor _,_, where the comma will appear infix between two
@@ -204,7 +204,7 @@ data _×_ (A B : Set) : Set where
 -- EXERCISE: Try it yourself:
 
 ×-exercise₁ : (A : Set) → A × A → A
-×-exercise₁ A x = {!!}
+×-exercise₁ A (x , x₁) = x
 
 -- Above, the green region is a metavariable, or hole.  These correspond to bits of a
 -- function or type that have yet to be completed.  Agda allows you to construct terms
@@ -241,10 +241,10 @@ data _×_ (A B : Set) : Set where
 -- EXERCISE: try the following:
 
 fst : (A B : Set) → A × B → A
-fst A B x = {!!}
+fst A B (x , x₁) = x
 
 snd : (A B : Set) → A × B → B
-snd A B x = {!!}
+snd A B (x , x₁) = x₁
 
 -- If 𝟘 corresponds to False, and 𝟙 corresponds to True, can you guess what _×_ corresponds
 -- to?  Recall the inference rules for conjunction from logic:
@@ -295,21 +295,24 @@ data _⊎_ (A B : Set) : Set where
   inj₂ : B → A ⊎ B
 
 -- Type \uplus to obtain the disjoint union ⊎ Unicode glyph.
---
+-- ⊎
 -- This is the moral equivalent of the Either type in Haskell.
 --
 -- EXERCISE: Complete the following:
 
 ⊎-exercise₁ : (A B : Set) → A ⊎ B → B ⊎ A
-⊎-exercise₁ A B x = {!!}
+⊎-exercise₁ A B (inj₁ x) = inj₂ x
+⊎-exercise₁ A B (inj₂ x) = inj₁ x
 
 ⊎-exercise₂ : (A B C : Set) → (A → C) → (B → C) → A ⊎ B → C
-⊎-exercise₂ A B C l r x = {!!}
+⊎-exercise₂ A B C l r (inj₁ x) = l x
+⊎-exercise₂ A B C l r (inj₂ x) = r x
 
 -- The following is harder and requires a function that has been defined previously:
 
 ⊎-exercise₃ : (A : Set) → 𝟘 ⊎ A → A
-⊎-exercise₃ A x = {!!}
+⊎-exercise₃ A (inj₁ x) = ex-falso A x
+⊎-exercise₃ A (inj₂ x) = x
 
 -- Recall that `ex-falso' allows us to deduce anything if we are handed something of type 𝟘.
 -- In the exercise above, you will eventually come across a proof state similar to
@@ -343,7 +346,8 @@ data Maybe (A : Set) : Set where
 -- EXERCISE: complete the following:
 
 maybe-exercise₁ : (A : Set) → Maybe A → A → A
-maybe-exercise₁ A m d = {!!}
+maybe-exercise₁ A nothing d = d
+maybe-exercise₁ A (just x) d = x
 
 -- Let's define another familiar type.  If 𝟙 has one canonical element, 𝟘 has zero canonical
 -- elements, then what type has two canonical elements?  The Boolean type:
@@ -361,7 +365,8 @@ data Bool : Set where
 -- EXERCISE: define conjunction.
 
 _∧_ : Bool → Bool → Bool
-_∧_ = {!!}
+true ∧ x₁ = x₁
+false ∧ x₁ = false
 
 -- Type \and to obtain the conjunction ∧ Unicode glyph.
   
@@ -417,10 +422,16 @@ false′ = inj₂ it
 
 -- EXERCISE: complete the following:
 if_then_else′_ : (A : Set) → Bool′ → A → A → A
-if b then t else′ f = {!!}
+if_then_else′_ b (inj₁ x) f x₁ = f
+if_then_else′_ b (inj₂ x) f x₁ = x₁
 
 _∧′_ : Bool′ → Bool′ → Bool′
-b ∧′ c = {!!}
+inj₁ x ∧′ c = c
+inj₂ x ∧′ c = false′ 
+
+-- Or
+-- inj₁ x ∧′ c = c
+-- inj₂ x ∧′ c = inj₂ x′
 
 -- Back to counting elements of types.  If 𝟙 and 𝟘 are base types, _⊎_ adds the number of elements
 -- and _×_ takes the product, what does _→_ do?  Let's see:
