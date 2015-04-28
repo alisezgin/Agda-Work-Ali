@@ -8,7 +8,7 @@ module Exercise2 where
   -- complain about `unsolved metas', i.e. there's still bits of the Exercise1 file
   -- that you have not completely refined into complete types or terms.
 
-  -- open import Exercise1
+  open import Exercise1
 
   -- We start by defining a list type.  This should look entirely familiar.
 
@@ -17,7 +17,7 @@ module Exercise2 where
     _∷_ : A → List A → List A
 
   -- Type \:: to obtain the cons ∷ Unicode glyph.
-  --
+  -- ∷
   -- Unlike the types we defined in List is recursive.  Naturally, then, a lot of the
   -- functions in this file are also going to be recursive.  One thing that you must
   -- learn quite quickly is that Agda is very picky about recursive functions and
@@ -46,7 +46,7 @@ module Exercise2 where
 
   map : {A B : Set} → (A → B) → List A → List B
   map f []       = []
-  map f (x ∷ xs) = {!!} ∷ {!!}
+  map f (x ∷ xs) = f x ∷ map f xs
 
   -- Agda has a small collection of rather limited automation tools compared to its more
   -- complex brethren like Coq.  However, these automated tools can be used to close
@@ -55,7 +55,7 @@ module Exercise2 where
 
   map′ : {A B : Set} → (A → B) → List A → List B
   map′ f []       = []
-  map′ f (x ∷ xs) = {!!} ∷ {!!}
+  map′ f (x ∷ xs) = f x ∷ map′ f xs
 
   -- Again, there are two holes in the body of the cons case of map′'s definition.  Put your
   -- cursor in the first and bring up the proof state with <Ctrl> + <c> + <,>.  You should
@@ -90,13 +90,14 @@ module Exercise2 where
   (x ∷ xs) ⊕ ys = x ∷ (xs ⊕ ys)
 
   -- Type \oplus to obtain the oplus ⊕ Unicode glyph.
-  --
+  -- ⊕ 
   -- Using both append and singleton we can define a naïve reversing function.  To refine a goal
   -- using e.g. ⊕ type `? ⊕ ?' inside the hole and press <Ctrl> + <c> + <r>.
   -- EXERCISE: complete the following:
 
   reverse : {A : Set} → List A → List A
-  reverse = {!!}
+  reverse [] = []
+  reverse (x ∷ x₁) = reverse x₁ ⊕ [ x ]
 
   -- Try Agda's automated proof search to close the goals above.  What happens?  Does it find
   -- something?  Does it find the correct thing?
@@ -109,8 +110,8 @@ module Exercise2 where
     zero : ℕ
     succ : ℕ → ℕ
 
-  -- Type \bN to obtain the natural number ℕ Unicode glyph.
-  --
+  -- Type \bn to obtain the natural number ℕ Unicode glyph.
+  -- ℕ
   -- We can define some familiar functions on ℕ via recursion, too:
 
   _+_ : ℕ → ℕ → ℕ
@@ -130,10 +131,12 @@ module Exercise2 where
   -- EXERCISE, complete the following:
 
   _*_ : ℕ → ℕ → ℕ
-  m * n = {!!}
+  zero * n = zero
+  succ m * n = n + (m * n)
 
   -- Using ℕ, We now have enough to define the length of a list:
   -- EXERCISE: complete the following:
 
   length : {A : Set} → List A → ℕ
-  length xs = {!!}
+  length [] = zero
+  length (x ∷ xs) = one + length xs
