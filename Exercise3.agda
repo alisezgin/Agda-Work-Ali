@@ -24,7 +24,7 @@ module Exercise3 where
     refl : {x : A} → x ≡ x
 
   -- Type \equiv to obtain the equivalence ≡ Unicode glyph.
-  --
+  -- ≡
   -- First, note that equality _≡_ is a data type just like ℕ, Bool or List.  There is nothing
   -- particularly special about _≡_'s definition, but it does demonstrate some interesting
   -- features of Agda (it has a more complex type than previously mentioned types).  Note also
@@ -34,13 +34,13 @@ module Exercise3 where
   -- the following series of definition, watch how the proof state evolves:
 
   sym₁ : {A : Set} → {x y : A} → x ≡ y → y ≡ x
-  sym₁ x≡y = {!!}
+  sym₁ refl = refl
 
   -- Use <Ctrl> + <c> + <,> to inspect the proof state above and compare it with the proof state
   -- below:
 
   sym₂ : {A : Set} → {x y : A} → x ≡ y → y ≡ x
-  sym₂ refl = {!!}
+  sym₂ refl = refl
 
   -- Note how Agda now knows that x and y are the same thing by pattern matching on x≡y and
   -- obtaining refl.  We can of course complete the definition of sym by using refl again,
